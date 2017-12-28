@@ -1,52 +1,58 @@
-var WBin;
-var random = Math.floor((Math.random() * 100000) + 1);
-var signalcarrier = "" + random;
 
 
-
+ var WBin;
+ 
+ function connectWS(username){
+     openWBin(username);
+ }
 //assegurarse que solo hay una conexion abierta al mismo tiempo
-function openWBin(signalcarrier){
+function openWBin(username){
+   
     console.log("Ejecutando openSoocketWBin()");  
-    
+    var random = Math.floor((Math.random() * 100000) + 1);
+    var signalcarrier = "" + random;
     //alert("ejecutando openWBin");
     //direccion puerto websocket
-    var direccion = "wss://erp.dafnube.com:48643/wstest/WBinStart/" + signalcarrier;
+    //var direccion = "wss://erp.dafnube.com:48643/wstest/WBinStart/" + signalcarrier;
+    
+    var direccion = "ws://localhost:8080/wstest/WBinStart/" + signalcarrier + "/" + username;
     WBin = new WebSocket(direccion);
     
     console.log("websocket info: " + WBin.toString());
-     sendUserLogin(signalcarrier);
+    sendUserLogin(username, signalcarrier, WBin);
+     
     WBin.onopen = function(event){
         if(event.data === undefined){
             return;
             console.log("event.data undefined");
-        }
-            
-       
+        }      
         //alert("ejecutando onOpen");
         write(event.data);
-    }
+    };
+    
     WBin.onmessage = function(event){
-        console.log("mensaje recibido")
+        console.log("mensaje recibido");
         var message = JSON.parse(event.data);
         processMessage(message);
         write("Mensaje recibido" + event.data);
         //gestionar mensaje (procesar mensaje)
-    }
+    };
+    
     WBin.onclose = function(event){
         write("connexion closed. " + event.data);
-    }
+    };
         
 }
 
 function processMessage(message){
     if(message.type === "WsMsgAccept"){
         alert("Mensaje confirmacion recibido");
-        window.location.replace("https://erp.dafnube.com:48643/Loggin/events.html");
+       
     }
 }
 
 
-function sendUserLogin(){
+function sendUserLogin(username, signalcarrier, WBin){
     console.log("Dentro de sendUserLogin()");
     console.log("User: " + username);
    
