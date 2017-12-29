@@ -46,9 +46,11 @@ function openWBin(){
 }
 
 function processMessage(message){
-    if(message.type === "WsMsgRequest"){
-        alert("Mensaje confirmacion recibido");
-       
+    if(message.type === "WsMsgLogin"){
+        alert("Usuario logeado");       
+    }
+     if(message.type === "WsMsgLogout"){
+        alert("Usuario desconectado");       
     }
 }
 
@@ -64,10 +66,14 @@ function sendUserLogin(user, signal){
    
     waitForSocketConnection(WBin, function(){
         //WBin.send("hola!!");
-         WBin.send(JSON.stringify({type: "WsMsgRequest", object: {signalcarrier: signalcarrier, username: username}}));
+         WBin.send(JSON.stringify({type: "WsMsgLogin", object: {signalcarrier: signalcarrier, username: username}}));
          console.log("Mensaje Enviado");
     });
     console.log("websocket info: " + WBin.toString());    
+}
+
+function Logout(){
+   WBin.send(JSON.stringify({type: "WsMsgLogout", object: {signalcarrier: signalcarrier, username: username}}));
 }
 
 

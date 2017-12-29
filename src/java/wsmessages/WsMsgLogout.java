@@ -1,11 +1,11 @@
 package wsmessages;
 
-public class WsMsgLoggin {
+public class WsMsgLogout implements WsMsg{
     
     private String signalcarrier;
     private String username;
 
-    public WsMsgLoggin(String signalcarrier, String username) {
+    public WsMsgLogout(String signalcarrier, String username) {
         this.username = username;
         this.signalcarrier = signalcarrier;
     }

@@ -72,7 +72,7 @@
                         <br/><br/><br/>
                         
                         <form action="LogoutServlet" method="POST">
-                             <input type="submit" value="LOGOUT" />
+                             <input type="submit" value="LOGOUT" onclick="Logout()"/>
                         </form>
                     </div>
 
