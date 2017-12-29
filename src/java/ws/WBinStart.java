@@ -7,15 +7,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
@@ -49,12 +40,7 @@ public class WBinStart {
 
         if (session.isOpen()) {
 
-            System.out.println("onMessage: " + session + " Message: " + message);
-            try {
-                session.getBasicRemote().sendText(message);
-            } catch (IOException ex) {
-                Logger.getLogger(WBinStart.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            System.out.println("onMessage: " + session + " Message: " + message);           
            
                 JsonParser parser = new JsonParser();
                 JsonElement jse = parser.parse(message);
@@ -68,7 +54,10 @@ public class WBinStart {
 
         }
     }
-
+    @OnError
+public void onError(Session session, Throwable error) {
+    System.out.println("Error: " + error.getMessage());
+}
     @OnClose
     public void onClose(Session session) {
         System.out.println("Session " + session.getId() + " has ended");
@@ -96,7 +85,7 @@ public class WBinStart {
             case "WsMsgRequest":
                 System.out.println("WsMsgRequest");
                 content = jso.get("object");
-                WsMsgLoggin request = gson.fromJson(content, WsMsgLoggin.class);
+                WsMsgLoggin request = gson.fromJson(content, wsmessages.WsMsgLoggin.class);
                 try{
                     driver.sendMessage(request, typeOfMessage);
                 }catch (Exception e){
@@ -107,11 +96,12 @@ public class WBinStart {
                 System.out.println("WsMsgRequest");
                 content = jso.get("object");
                 WsMsgLoggin accept = gson.fromJson(content, WsMsgLoggin.class);
+                /*
                 try{
                     driver.sendMessage(accept, typeOfMessage);
                 }catch (Exception e){
                     e.printStackTrace();
-                }
+                }*/               
                 break;
                 
                 

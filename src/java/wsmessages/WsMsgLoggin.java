@@ -1,31 +1,29 @@
-
 package wsmessages;
 
-
 public class WsMsgLoggin {
-    private String username;
+    
     private String signalcarrier;
+    private String username;
 
-    public WsMsgLoggin(String username, String signalcarrier) {
+    public WsMsgLoggin(String signalcarrier, String username) {
         this.username = username;
         this.signalcarrier = signalcarrier;
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getSignalcarrier() {
         return signalcarrier;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getUsername() {
+        return username;
     }
 
     public void setSignalcarrier(String signalcarrier) {
         this.signalcarrier = signalcarrier;
     }
-    
-    
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 }

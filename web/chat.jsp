@@ -15,16 +15,14 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <script src="js/ws_conn.js"></script>
+        <script src="js/ws_conn.js"></script>      
         
-        <script> 
-             connectWS('<%= session.getAttribute("user")%>');
-        </script>
         <style>
            
         </style>
     </head>
     <body>
+       
         
         <div class="container-fluid">
 
@@ -83,6 +81,8 @@
                 </div>
             </div>
         </div>
-
+                             <script> 
+            sendUserLogin('<%=session.getAttribute("user")%>', '<%=session.getId()%>');
+        </script>
     </body>
 </html>
