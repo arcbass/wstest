@@ -7,8 +7,7 @@ var signalcarrier;
 //assegurarse que solo hay una conexion abierta al mismo tiempo
 function openWBin() {
 
-    //direccion puerto websocket
-    //var direccion = "wss://erp.dafnube.com:48643/wstest/WBinStart/" + signalcarrier;
+    //direccion puerto websocket   
 
     var direccion = "ws://localhost:8080/wstest/Chat/" + signalcarrier + "/" + username;
     WBin = new WebSocket(direccion);
