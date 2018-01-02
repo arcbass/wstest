@@ -82,6 +82,7 @@ public class MessageTextDecoder implements Decoder.Text<WsMessage> {
     public boolean willDecode(String message) {
         //verify that the message is a JSON
         try {
+            System.out.println("parsing message");
             JsonParser parser = new JsonParser();
             JsonElement jse = parser.parse(message);
             if (!jse.isJsonObject()) {

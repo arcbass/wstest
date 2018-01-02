@@ -22,9 +22,7 @@ import wsmessages.WsMessage;
 )
 public class ChatEndpoint {
 
-    ChatConnections connections = ChatConnections.getInstance();
-    String signalcarrier;
-    String user;
+    ChatConnections connections = ChatConnections.getInstance();    
 
     @OnOpen
     public void onOpen(Session session,
@@ -34,8 +32,7 @@ public class ChatEndpoint {
         session.getUserProperties().put("username", user);
 
         System.out.println("onOpen: " + session + "---" + signalcarrier + "---" + user);
-        this.signalcarrier = signalcarrier;
-        this.user = user;
+        
         connections.addConnection(session, user, signalcarrier);
 
         // Collection<WBin> allConnections = new ArrayList<>(driver.getConnections().values());
@@ -54,9 +51,9 @@ public class ChatEndpoint {
     }
 
     @OnMessage
-    public void onBinaryMessage(ByteBuffer data, Session session) throws IOException {
+    public void onBinaryMessage(byte[] data, Session session) throws IOException {
         System.out.println("broadcastBinary: " + data);
-        session.getBasicRemote().sendBinary(data);
+        session.getBasicRemote().sendBinary(ByteBuffer.wrap(data));
     }
 
     @OnError

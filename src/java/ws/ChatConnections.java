@@ -5,14 +5,18 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
+import wsmessages.WsMsgLogout;
 import wsmessages.WsMsgMessage;
 
 public class ChatConnections {
 
     private static ChatConnections INSTANCE = null;
     private static final Set<Session> connections = new HashSet<Session>();
+    private static Set<String> usersConnected = new HashSet<String>();
 
     private ChatConnections() {
     }
@@ -40,14 +44,34 @@ public class ChatConnections {
         session.getUserProperties().put("user", user);
         session.getUserProperties().put("sessionid", sessionid);
         connections.add(session);
+        usersConnected.add(user);
         System.out.println(connections.toString());
     }
 
     public void closeConnection(Session session) {
         System.out.println("Dentro closeConnection()");
         System.out.println("SIGNAL CARRIER: " + session.getUserProperties().get("sessionid"));
-        connections.remove(session);
-
+        String userName = (String) session.getUserProperties().get("user");
+        connections.remove(session);        
+        
+        boolean stillConnected = false;        
+        for(Session s : connections){
+            if(userName.equals((String) s.getUserProperties().get("user"))){
+                stillConnected = true;
+                break;
+            }
+        }
+        if(!stillConnected){
+            usersConnected.remove("userName");
+            WsMessage logoutMsg = new WsMessage("WsMsgLogout", new WsMsgLogout(userName));
+            try {
+                sendMessageToAll(logoutMsg);
+            } catch (IOException ex) {
+                Logger.getLogger(ChatConnections.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (EncodeException ex) {
+                Logger.getLogger(ChatConnections.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public void sendMessage(WsMessage message) throws IOException, EncodeException {

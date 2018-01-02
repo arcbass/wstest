@@ -73,11 +73,11 @@
                         <textarea class="form-control" rows="5" id="comment"></textarea>
                         <button type="button" class="btn" onclick="sendMessage()">Send</button>
                         <br/><br/><br/>
-                        <button type="button" class="btn" onclick="defineImageBinary()">Send Image</button>
+                        <button type="button" class="btn" onclick="getImage()">Send Image</button>
                         <br/><br/><br/>
 
                         <form action="LogoutServlet" method="POST">
-                            <input type="submit" value="LOGOUT" onclick="Logout()"/>
+                            <input type="submit" value="LOGOUT" />
                         </form>
 
                         <canvas id="myCanvas" width="300" height="300"></canvas>

@@ -30,6 +30,7 @@ function openWBin() {
             var message = JSON.parse(event.data);
             processMessage(message);
         } else {
+            
             drawImageBinary(event.data);
         }
 
@@ -61,6 +62,7 @@ function processMessage(message) {
 
 function sendBinary(bytes) {
     console.log("sending binary: " + Object.prototype.toString.call(bytes));
+    console.log("data length: " + bytes.byteLength);
     WBin.send(bytes);
 }
 
@@ -90,10 +92,11 @@ function sendMessage() {
     console.log("Mensaje Enviado");
 }
 
+/*
 function Logout() {
     WBin.send(JSON.stringify({type: "WsMsgLogout", object: {username: username}}));
 }
-
+*/
 
 function waitForSocketConnection(socket, callback) {
     setTimeout(
