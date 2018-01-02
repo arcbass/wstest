@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -15,6 +17,7 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import wsmessages.WsMsg;
 import wsmessages.WsMsgLogout;
+import wsmessages.WsMsgMessage;
 
 @ServerEndpoint("/WBinStart/{signalcarrier}/{username}")
 public class WBinStart {
@@ -47,6 +50,12 @@ public class WBinStart {
 
         }
     }
+    @OnMessage
+    public void onBinaryMessage(ByteBuffer data, Session session) throws IOException {
+        System.out.println("broadcastBinary: " + data);
+        session.getBasicRemote().sendBinary(data);
+    }
+   
 
     @OnError
     public void onError(Session session, Throwable error) {
@@ -86,9 +95,20 @@ public class WBinStart {
                 System.out.println("WsMsgLogin");
                 //create an object in function of the type of message
                 content = jso.get("object");                
-                WsMsg msgLogin = gson.fromJson(content, wsmessages.WsMsgLogin.class);
+                WsMsg msgLogin = gson.fromJson(content, WsMsgLogin.class);
                 try {
                     driver.sendMessageToAll(msgLogin, typeOfMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case "WsMsgMessage":
+                System.out.println("WsMsgLogin");
+                //create an object in function of the type of message
+                content = jso.get("object");                
+                WsMsg msgMessage = gson.fromJson(content, WsMsgMessage.class);
+                try {
+                    driver.sendMessageToAll(msgMessage, typeOfMessage);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

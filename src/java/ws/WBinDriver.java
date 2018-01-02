@@ -107,7 +107,7 @@ public class WBinDriver {
             Session session = con.getSession();
             System.out.println(session + "   " + signalcarrier);
             WsMessage wsmessage = new WsMessage(msgType, message);
-            String jsmessage = jsonProcessor.toJson(wsmessage);
+            String jsmessage = jsonProcessor.toJson(wsmessage);            
 
             try {
                 //send it by ws
