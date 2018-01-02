@@ -11,11 +11,20 @@ package wsmessages;
  */
 public class WsMessage {
     private String type;
-    private Object object;
+    private WsMsg message;
 
-    public WsMessage(String type, Object object) {
+    public WsMessage(String type, WsMsg message) {
         this.type = type;
-        this.object = object;
-    }   
+        this.message = message;
+    } 
+
+    public String getType() {
+        return type;
+    }
+
+    public WsMsg getMessage() {
+        return message;
+    }    
+    
     
 }

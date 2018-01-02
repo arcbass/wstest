@@ -10,7 +10,7 @@ function openWBin() {
     //direccion puerto websocket
     //var direccion = "wss://erp.dafnube.com:48643/wstest/WBinStart/" + signalcarrier;
 
-    var direccion = "ws://localhost:8080/wstest/WBinStart/" + signalcarrier + "/" + username;
+    var direccion = "ws://localhost:8080/wstest/Chat/" + signalcarrier + "/" + username;
     WBin = new WebSocket(direccion);
     WBin.binaryType = "arraybuffer";
 
