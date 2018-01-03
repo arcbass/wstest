@@ -11,11 +11,13 @@ function getImage() {
     var oReq = new XMLHttpRequest();
     oReq.open("GET", "img/dti.jpg", true);
     oReq.responseType = "arraybuffer";
-
+    var reciver = $("ul.nav-pills>li.active").text();
+    
     oReq.onload = function (onEvent) {
         var imageBuffer = oReq.response;        
-        var reciverBuffer = binaryMsg("Home");
+        var reciverBuffer = binaryMsg(reciver);
         var bufferComplete = _appendBuffer(reciverBuffer, imageBuffer);
+        console.log(imageBuffer.byteLength);
         console.log(bufferComplete.byteLength);
         
         sendBinary(bufferComplete);
@@ -24,7 +26,6 @@ function getImage() {
 }
 
 function binaryMsg(msg) {
-    var msg = "Home";
     var buffer = new ArrayBuffer(msg.length + 1);
     var bytes = new Uint8Array(buffer);
     for (var i = 0; i < bytes.length; i++) {
@@ -49,16 +50,31 @@ function defineImageBinary() {
 }
 
 function drawImageBinary(ArrayBuffer) {
-    var bytes = new Uint8Array(ArrayBuffer);
-    console.log("drawImageBinary (bytes.length): " + bytes.length);
-
+    
+    //console.log("drawImageBinary (bytes.length): " + bytes.length);
+    var length = new Uint8Array(ArrayBuffer, 0, 1);
+    alert(length);
+    var senderArr = new Uint8Array(ArrayBuffer, 1, length);
+    var sender = "";
+    for(var i = 0; i <= length; i++) {
+        sender += String.fromCharCode(senderArr[i]);
+    }
+    alert(sender);
+    var byteStartImage = parseInt(length) + 1;
+    alert(byteStartImage);
+    var bytes = new Uint8Array(ArrayBuffer, byteStartImage);
+    //alert(bytes.byteLength);
+    
     var blob = new Blob([bytes], {type: "image/jpeg"});
     var urlCreator = window.URL || window.webkitURL;
     var imageUrl = urlCreator.createObjectURL(blob);    
 
     var myImage = new Image(150, 150);
     myImage.src = imageUrl;
-    $("#home").append(myImage);
+     var senderId = '#' + sender.toString() + '>ul';
+     alert(senderId);
+    $(senderId).append(myImage);
+    
     
 }
 /**

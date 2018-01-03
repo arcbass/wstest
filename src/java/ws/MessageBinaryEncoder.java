@@ -20,10 +20,22 @@ public class MessageBinaryEncoder implements Encoder.Binary<WsBinaryMessage>{
     @Override
     public ByteBuffer encode(WsBinaryMessage message) throws EncodeException {
         if(message.getSender() != null) {
-            ByteBuffer senderData = ByteBuffer.wrap(message.getSender().getBytes());
             
-            int bufferCapacity = message.getData().capacity() + message.getSender().length();
-            return ByteBuffer.allocate(bufferCapacity).put(senderData).put(message.getData());
+            int bufferCapacity = 
+                    message.getData().capacity() 
+                    + message.getSender().length() 
+                    + 1;
+            System.out.println("buffer size:" + bufferCapacity);
+            
+            
+            ByteBuffer dataEncoded = ByteBuffer.allocate(bufferCapacity)
+                    .put((byte) message.getSender().length())
+                    .put(message.getSender().getBytes())
+                    .put(message.getData());
+                    
+            dataEncoded.position(0);
+            
+            return dataEncoded;
             
         }
         else return message.getData();

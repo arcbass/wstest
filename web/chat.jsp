@@ -59,20 +59,12 @@
                         <div id="home" class="tab-pane fade in active">
                             <h3>HOME</h3>
                             <p>Some content.</p>
-                        </div>
-                        <div id="menu1" class="tab-pane fade">
-                            <h3>Menu 1</h3>
-                            <p>Some content in menu 1.</p>
-                        </div>
-                        <div id="menu2" class="tab-pane fade">
-                            <h3>Menu 2</h3>
-                            <p>Some content in menu 2.</p>
-                        </div>
+                        </div>                        
                     </div>
                     <div class="form-group">
                         <label for="comment">Comment:</label>
                         <textarea class="form-control" rows="5" id="comment"></textarea>
-                        <button type="button" class="btn" onclick="sendMessage()">Send</button>
+                        <button type="button" id="btnSend" class="btn" onclick="sendMessage()" >Send</button>
                         <br/><br/><br/>
                         <button type="button" class="btn" onclick="getImage()">Send Image</button>
                         <br/><br/><br/>

@@ -19,6 +19,7 @@ public class MessageBinaryDecoder implements Decoder.Binary<WsBinaryMessage>{
 
     @Override
     public WsBinaryMessage decode(ByteBuffer data) throws DecodeException {
+         System.out.println("before decoder: " + data);  
         String reciver = getReciverName(data);
         System.out.println("Reciver: " + reciver);
         data.position(reciver.length()+1);

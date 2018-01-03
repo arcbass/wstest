@@ -18,13 +18,13 @@ import wsmessages.WsMessage;
 
 @ServerEndpoint(
         value = "/Chat/{signalcarrier}/{username}",
-        encoders = {MessageTextEncoder.class},
+        encoders = {MessageTextEncoder.class, MessageBinaryEncoder.class},
         decoders = {MessageTextDecoder.class, MessageBinaryDecoder.class}
 )
 public class ChatEndpoint {
 
     ChatConnections connections = ChatConnections.getInstance(); 
-    private String user;
+    
 
     @OnOpen
     public void onOpen(Session session,
@@ -32,7 +32,6 @@ public class ChatEndpoint {
             @PathParam("username") String user) {
 
         session.getUserProperties().put("username", user);
-        this.user = user;
         System.out.println("onOpen: " + session + "---" + signalcarrier + "---" + user);
         
         connections.addConnection(session, user, signalcarrier);
@@ -54,9 +53,11 @@ public class ChatEndpoint {
 
     @OnMessage(maxMessageSize = 50000)
     public void onBinaryMessage(WsBinaryMessage message, Session session) throws IOException {
-        System.out.println("broadcastBinary: " + message.getData());              
-               
-        session.getBasicRemote().sendBinary(message.getData());
+        System.out.println("after decoder: " + message.getData());              
+        
+        message.setSender((String) session.getUserProperties().get("user"));
+        //session.getBasicRemote().sendBinary(message.getData());
+        connections.sendBinaryMessage(message);        
     }
 
     @OnError

@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
+import wsmessages.WsBinaryMessage;
 import wsmessages.WsMsgLogout;
 import wsmessages.WsMsgMessage;
 
@@ -144,6 +145,35 @@ public class ChatConnections {
                 //Enviamos por WS
                 Type listType = new TypeToken<Set<String>>() {}.getType();
                 session.getBasicRemote().sendText(jsonProcessor.toJson(usersConnected, listType));
+            }
+        }
+    }
+    
+    void sendBinaryMessage(WsBinaryMessage message) {
+        
+        String reciver = message.getReciver();
+        
+        Iterator it = connections.iterator();
+        Session session;
+        while (it.hasNext()) {
+            session = (Session) it.next();
+            String sessionUser = (String) session.getUserProperties().get("user");
+
+            if (sessionUser.equals(reciver)) {
+                //Canal por el que enviar
+
+                String sessionId = (String) session.getUserProperties().get("sessionid");
+                System.out.println(session + "   " + sessionId);
+
+                try {
+                    //Enviamos por WS
+                    session.getBasicRemote().sendObject(message);
+                    System.out.println("binary message sended");
+                } catch (IOException ex) {
+                    Logger.getLogger(ChatConnections.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (EncodeException ex) {
+                    Logger.getLogger(ChatConnections.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }

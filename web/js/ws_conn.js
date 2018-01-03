@@ -54,22 +54,22 @@ function openWBin() {
 function processMessage(message) {
     if (message.type === "WsMsgLogin") {
         var userLoged = message.message.username;
-        if (userLoged != username){
+        if (userLoged != username) {
             createTab(userLoged);
         }
-        
+
     }
-    if (message.type === "WsMsgLogout") {        
+    if (message.type === "WsMsgLogout") {
         removeTab(message.message.username);
     }
-    
-    if(message.type === "WsMsgMessage") {
+
+    if (message.type === "WsMsgMessage") {
         var sender = message.message.username;
         var msg = message.message.message;
-        
-        insertMessage(msg, sender)
+
+        insertMessage(msg, sender, sender)
     }
-    
+
     if (message instanceof Array) {
         alert(message);
         var index = message.indexOf(username);
@@ -102,12 +102,18 @@ function sendUserLogin(user, signal) {
 }
 
 function sendMessage() {
-    //var msg = document.getElementById("comment").value;
+    
     var msg = $("#comment").val();
-    var reciver = $("li.active").text();
-
-    WBin.send(JSON.stringify({type: "WsMsgMessage", object: {username: username, reciver: reciver, message: msg}}));
-    console.log("Mensaje Enviado");
+    var reciver = $("ul.nav-pills>li.active").text();
+    alert(reciver);
+    
+    if (msg != "" && (reciver !== null || reciver != "")) {
+        $("#comment").val("");        
+        
+        WBin.send(JSON.stringify({type: "WsMsgMessage", object: {username: username, reciver: reciver, message: msg}}));
+        insertMessage(msg, reciver, "me")
+        console.log("Mensaje Enviado");
+    }
 }
 
 /*

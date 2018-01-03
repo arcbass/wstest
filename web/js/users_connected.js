@@ -6,11 +6,15 @@
 
 function createTab(user) {
     var nextTab = user;
-    // create the tab
-    $('<li id="tab_' + nextTab + '"><a href="#' + nextTab + '" data-toggle="pill">' + nextTab + '</a></li>').appendTo('.nav-pills');
+    var myEle = document.getElementById("user");
+    if (!myEle) {
+        // create the tab
+        $('<li id="tab_' + nextTab + '"><a href="#' + nextTab + '" data-toggle="pill">' + nextTab + '</a></li>').appendTo('.nav-pills');
 
-    // create the tab content
-    $('<div class="tab-pane" id="' + nextTab + '">' + nextTab + ' content</div>').appendTo('.tab-content');   
+        // create the tab content
+        $('<div class="tab-pane" id="' + nextTab + '"><ul></ul></div>').appendTo('.tab-content');
+    }
+
 }
 ;
 
@@ -20,14 +24,14 @@ function removeTab(user) {
     //$('#tab_arnau').remove();
 }
 
-function listOfUsers(users){
-    for(var i = 0; i < users.length; i++){
+function listOfUsers(users) {
+    for (var i = 0; i < users.length; i++) {
         createTab(users[i]);
     }
 }
 
-function insertMessage(msg, sender) {
-    $('<p>' + msg + '</p></br>').appendTo("#" + sender)
+function insertMessage(msg, sender, from) {
+    $('<li class="new"><span class="name">' + from + ': ' + msg + '</span>').appendTo("#" + sender + ">ul")
 }
 
 
