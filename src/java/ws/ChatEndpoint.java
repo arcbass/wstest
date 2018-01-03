@@ -13,12 +13,13 @@ import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
+import wsmessages.WsBinaryMessage;
 import wsmessages.WsMessage;
 
 @ServerEndpoint(
         value = "/Chat/{signalcarrier}/{username}",
         encoders = {MessageTextEncoder.class},
-        decoders = {MessageTextDecoder.class}
+        decoders = {MessageTextDecoder.class, MessageBinaryDecoder.class}
 )
 public class ChatEndpoint {
 
@@ -39,7 +40,7 @@ public class ChatEndpoint {
     }
 
     @OnMessage
-    public void echoTextMessage(Session session, WsMessage message) throws IOException, EncodeException {
+    public void onTextMessage(Session session, WsMessage message) throws IOException, EncodeException {
 
         if (session.isOpen()) {
 
@@ -50,10 +51,11 @@ public class ChatEndpoint {
         }
     }
 
-    @OnMessage
-    public void onBinaryMessage(byte[] data, Session session) throws IOException {
-        System.out.println("broadcastBinary: " + data);
-        session.getBasicRemote().sendBinary(ByteBuffer.wrap(data));
+    @OnMessage(maxMessageSize = 50000)
+    public void onBinaryMessage(WsBinaryMessage message, Session session) throws IOException {
+        System.out.println("broadcastBinary: " + message.getData());              
+               
+        session.getBasicRemote().sendBinary(message.getData());
     }
 
     @OnError
@@ -86,5 +88,14 @@ public class ChatEndpoint {
         } catch (EncodeException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private String getReciverName(ByteBuffer data){
+        int length = data.get(0); 
+        String reciver = "";
+        for(int i = 1; i <= length; i++) {
+            reciver += (char) data.get(i);
+        }
+        return reciver;
     }
 }

@@ -118,4 +118,6 @@ public class ChatConnections {
             session.getBasicRemote().sendObject(message);
         }
     }
+    
+    
 }

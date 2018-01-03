@@ -25,7 +25,7 @@ function openWBin() {
     };
 
     WBin.onmessage = function (event) {
-        console.log("mensaje recibido");
+        console.log("mensaje recibido:" + event.data);
         if (typeof event.data == "string") {
             var message = JSON.parse(event.data);
             processMessage(message);

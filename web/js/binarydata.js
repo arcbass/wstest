@@ -12,14 +12,27 @@ function getImage() {
     oReq.open("GET", "img/dti.jpg", true);
     oReq.responseType = "arraybuffer";
 
-    var arrayBuffer;
     oReq.onload = function (onEvent) {
-        arrayBuffer = oReq.response;
-        var bytes = new Uint8Array(arrayBuffer);
-        sendBinary(bytes.buffer);
+        var imageBuffer = oReq.response;        
+        var reciverBuffer = binaryMsg("Home");
+        var bufferComplete = _appendBuffer(reciverBuffer, imageBuffer);
+        console.log(bufferComplete.byteLength);
+        
+        sendBinary(bufferComplete);
     };
     oReq.send(null);
+}
 
+function binaryMsg(msg) {
+    var msg = "Home";
+    var buffer = new ArrayBuffer(msg.length + 1);
+    var bytes = new Uint8Array(buffer);
+    for (var i = 0; i < bytes.length; i++) {
+        if(i == 0) bytes[i] = msg.length;
+        else bytes[i] = msg.charCodeAt(i - 1);
+        
+    }
+    return bytes.buffer;
 }
 
 function defineImageBinary() {
@@ -35,19 +48,30 @@ function defineImageBinary() {
     sendBinary(buffer);
 }
 
-function drawImageBinary(blob) {
-    var bytes = new Uint8Array(blob);
+function drawImageBinary(ArrayBuffer) {
+    var bytes = new Uint8Array(ArrayBuffer);
     console.log("drawImageBinary (bytes.length): " + bytes.length);
 
-    var imageData = context.createImageData(canvas.width, canvas.height);
+    var blob = new Blob([bytes], {type: "image/jpeg"});
+    var urlCreator = window.URL || window.webkitURL;
+    var imageUrl = urlCreator.createObjectURL(blob);    
 
-    for (var i = 8; i < imageData.data.length; i++) {
-        imageData.data[i] = bytes[i];
-    }
-    context.putImageData(imageData, 0, 0);
-
-    var img = document.createElement('img');
-    img.height = canvas.height;
-    img.width = canvas.width;
-    img.src = canvas.toDataURL();
+    var myImage = new Image(150, 150);
+    myImage.src = imageUrl;
+    $("#home").append(myImage);
+    
 }
+/**
+ * Creates a new Uint8Array based on two different ArrayBuffers
+ *
+ * @private
+ * @param {ArrayBuffers} buffer1 The first buffer.
+ * @param {ArrayBuffers} buffer2 The second buffer.
+ * @return {ArrayBuffers} The new ArrayBuffer created out of the two.
+ */
+var _appendBuffer = function(buffer1, buffer2) {
+  var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+  tmp.set(new Uint8Array(buffer1), 0);
+  tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
+  return tmp.buffer;
+};
