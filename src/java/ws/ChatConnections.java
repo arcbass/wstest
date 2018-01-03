@@ -1,7 +1,10 @@
 package ws;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import wsmessages.WsMessage;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -40,6 +43,10 @@ public class ChatConnections {
         return connections;
     }
 
+    public static Set<String> getUsersConnected() {
+        return usersConnected;
+    }    
+
     public void addConnection(Session session, String user, String sessionid) {
         session.getUserProperties().put("user", user);
         session.getUserProperties().put("sessionid", sessionid);
@@ -62,7 +69,7 @@ public class ChatConnections {
             }
         }
         if(!stillConnected){
-            usersConnected.remove("userName");
+            usersConnected.remove(userName);
             WsMessage logoutMsg = new WsMessage("WsMsgLogout", new WsMsgLogout(userName));
             try {
                 sendMessageToAll(logoutMsg);
@@ -117,7 +124,28 @@ public class ChatConnections {
             //Enviamos por WS
             session.getBasicRemote().sendObject(message);
         }
+    }   
+
+    void sendUsersConnected(WsMessage message) throws IOException {
+        String user = message.getMessage().getUsername();
+        Gson jsonProcessor = new Gson();
+        Iterator it = connections.iterator();
+        Session session;
+        while (it.hasNext()) {
+            session = (Session) it.next();
+            String sessionUser = (String) session.getUserProperties().get("user");
+
+            if (sessionUser.equals(user)) {
+                //Canal por el que enviar
+
+                String sessionId = (String) session.getUserProperties().get("sessionid");
+                System.out.println(session + "   " + sessionId);
+                
+                //Enviamos por WS
+                Type listType = new TypeToken<Set<String>>() {}.getType();
+                session.getBasicRemote().sendText(jsonProcessor.toJson(usersConnected, listType));
+            }
+        }
     }
-    
     
 }

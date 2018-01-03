@@ -58,6 +58,9 @@ function processMessage(message) {
     if (message.type === "WsMsgLogout") {
         alert("Usuario desconectado");
     }
+    if (message instanceof Array){
+        alert(message);
+    }
 }
 
 function sendBinary(bytes) {

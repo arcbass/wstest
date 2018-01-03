@@ -23,7 +23,8 @@ import wsmessages.WsMessage;
 )
 public class ChatEndpoint {
 
-    ChatConnections connections = ChatConnections.getInstance();    
+    ChatConnections connections = ChatConnections.getInstance(); 
+    private String user;
 
     @OnOpen
     public void onOpen(Session session,
@@ -31,7 +32,7 @@ public class ChatEndpoint {
             @PathParam("username") String user) {
 
         session.getUserProperties().put("username", user);
-
+        this.user = user;
         System.out.println("onOpen: " + session + "---" + signalcarrier + "---" + user);
         
         connections.addConnection(session, user, signalcarrier);
@@ -76,6 +77,9 @@ public class ChatEndpoint {
         try {
             switch (messageType) {
                 case "WsMsgLogin":
+                    connections.sendMessageToAll(message);
+                    connections.sendUsersConnected(message);
+                    break;
                 case "WsMsgLogout":
                     connections.sendMessageToAll(message);
                     break;
