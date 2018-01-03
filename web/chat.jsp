@@ -16,7 +16,8 @@
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+        
+        <script src="js/users_connected.js"></script>
         <script src="js/ws_conn.js"></script>    
 
 
@@ -45,9 +46,9 @@
                 <div class="col-sm-3 sidenav">
                     <h4>Chat</h4>
                     <ul class="nav nav-pills  nav-stacked">
-                        <li class="active"><a data-toggle="pill" href="#home">Home</a></li>
+                        <!--<li class="active"><a data-toggle="pill" href="#home">Home</a></li>
                         <li><a data-toggle="pill" href="#menu1">Menu 1</a></li>
-                        <li><a data-toggle="pill" href="#menu2">Menu 2</a></li>                        
+                        <li><a data-toggle="pill" href="#menu2">Menu 2</a></li>-->                        
                     </ul>      
                 </div>
 
@@ -92,5 +93,6 @@
             sendUserLogin('<%=session.getAttribute("user")%>', '<%=session.getId()%>');
         </script>
         <script src="js/binarydata.js"></script>
+        
     </body>
 </html>

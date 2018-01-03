@@ -30,11 +30,11 @@ function openWBin() {
             var message = JSON.parse(event.data);
             processMessage(message);
         } else {
-            
+
             drawImageBinary(event.data);
         }
 
-        
+
 
         write("Mensaje recibido" + event.data);
         //gestionar mensaje (procesar mensaje)
@@ -53,13 +53,28 @@ function openWBin() {
 
 function processMessage(message) {
     if (message.type === "WsMsgLogin") {
-        alert("Usuario logeado");
+        var userLoged = message.message.username;
+        if (userLoged != username){
+            createTab(userLoged);
+        }
+        
     }
-    if (message.type === "WsMsgLogout") {
-        alert("Usuario desconectado");
+    if (message.type === "WsMsgLogout") {        
+        removeTab(message.message.username);
     }
-    if (message instanceof Array){
+    
+    if(message.type === "WsMsgMessage") {
+        var sender = message.message.username;
+        var msg = message.message.message;
+        
+        insertMessage(msg, sender)
+    }
+    
+    if (message instanceof Array) {
         alert(message);
+        var index = message.indexOf(username);
+        message.splice(index, 1);
+        listOfUsers(message);
     }
 }
 
@@ -96,10 +111,10 @@ function sendMessage() {
 }
 
 /*
-function Logout() {
-    WBin.send(JSON.stringify({type: "WsMsgLogout", object: {username: username}}));
-}
-*/
+ function Logout() {
+ WBin.send(JSON.stringify({type: "WsMsgLogout", object: {username: username}}));
+ }
+ */
 
 function waitForSocketConnection(socket, callback) {
     setTimeout(
