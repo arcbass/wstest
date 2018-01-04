@@ -21,7 +21,7 @@ function openWBin() {
             console.log("event.data undefined");
         }
         //alert("ejecutando onOpen");
-        write(event.data);
+        console.log(event.data);
     };
 
     WBin.onmessage = function (event) {
@@ -36,17 +36,17 @@ function openWBin() {
 
 
 
-        write("Mensaje recibido" + event.data);
+        console.log("Mensaje recibido" + event.data);
         //gestionar mensaje (procesar mensaje)
     };
 
     WBin.onerror = function (event) {
-        write("ERROR: " + event.data);
+        console.log("ERROR: " + event.data);
     }
 
     WBin.onclose = function (event) {
         console.log("websocket info: " + WBin.toString());
-        write("connexion closed. " + event.data);
+        console.log("connexion closed. " + event.data);
     };
 
 }
@@ -71,7 +71,7 @@ function processMessage(message) {
     }
 
     if (message instanceof Array) {
-        alert(message);
+        console.log("Users connected: " + message);
         var index = message.indexOf(username);
         message.splice(index, 1);
         listOfUsers(message);
@@ -105,8 +105,7 @@ function sendMessage() {
     
     var msg = $("#comment").val();
     var reciver = $("ul.nav-pills>li.active").text();
-    alert(reciver);
-    
+        
     if (msg != "" && (reciver !== null || reciver != "")) {
         $("#comment").val("");        
         
@@ -141,6 +140,3 @@ function waitForSocketConnection(socket, callback) {
     , 5);
 }
 
-function write(text) {
-    console.log("Text: " + text);
-}

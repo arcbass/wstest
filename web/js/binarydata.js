@@ -1,81 +1,85 @@
 /* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Functions to upload files, send and recive them in binary
  */
-var canvas = document.getElementById("myCanvas");
-var context = canvas.getContext("2d");
 
+//gets the file to from the input and sends it.
+function inputFile() {
+    var x = document.getElementById("myFile");
 
-function getImage() {
-    var oReq = new XMLHttpRequest();
-    oReq.open("GET", "img/dti.jpg", true);
-    oReq.responseType = "arraybuffer";
-    var reciver = $("ul.nav-pills>li.active").text();
-    
-    oReq.onload = function (onEvent) {
-        var imageBuffer = oReq.response;        
-        var reciverBuffer = binaryMsg(reciver);
-        var bufferComplete = _appendBuffer(reciverBuffer, imageBuffer);
-        console.log(imageBuffer.byteLength);
-        console.log(bufferComplete.byteLength);
-        
-        sendBinary(bufferComplete);
-    };
-    oReq.send(null);
+    for (var i = 0; i < x.files.length; i++) {
+        var file = x.files[i];
+        console.log(file.size);
+
+        var reader = new FileReader();
+        reader.onload = function () {
+            var arrayBuffer = reader.result;            
+            
+            var reciver = $("ul.nav-pills>li.active").text();
+            var reciverBuffer = binaryMsgAttribute(reciver);
+            var bufferComplete = _appendBuffer(reciverBuffer, arrayBuffer);
+            
+            console.log(arrayBuffer.byteLength);
+            console.log(bufferComplete.byteLength);
+            
+            sendBinary(bufferComplete);
+        };
+        reader.readAsArrayBuffer(file);
+    }
 }
 
-function binaryMsg(msg) {
+//append the name of the sender and its length. This way the server knows to
+//which user has to be sent.
+function binaryMsgAttribute(msg) {
     var buffer = new ArrayBuffer(msg.length + 1);
     var bytes = new Uint8Array(buffer);
     for (var i = 0; i < bytes.length; i++) {
-        if(i == 0) bytes[i] = msg.length;
-        else bytes[i] = msg.charCodeAt(i - 1);
-        
+        if (i === 0)
+            bytes[i] = msg.length;
+        else
+            bytes[i] = msg.charCodeAt(i - 1);
+
     }
     return bytes.buffer;
 }
 
-function defineImageBinary() {
-    var image = new Image(300, 300);
-    image.src = 'img/dti.jpg';
-    //var buffer = new ArrayBuffer(image.data.length);
-    var buffer = getImage();
-
-    var bytes = new Uint8Array(buffer);
-    for (var i = 0; i < bytes.length; i++) {
-        bytes[i] = image.data[i];
-    }
-    sendBinary(buffer);
-}
-
 function drawImageBinary(ArrayBuffer) {
-    
+
     //console.log("drawImageBinary (bytes.length): " + bytes.length);
+    //get the length of the name
     var length = new Uint8Array(ArrayBuffer, 0, 1);
     alert(length);
+    
+    //get the name of the message sender 
     var senderArr = new Uint8Array(ArrayBuffer, 1, length);
     var sender = "";
-    for(var i = 0; i <= length; i++) {
+    for (var i = 0; i <= length; i++) {
         sender += String.fromCharCode(senderArr[i]);
     }
     alert(sender);
+
+    //get the image
     var byteStartImage = parseInt(length) + 1;
     alert(byteStartImage);
     var bytes = new Uint8Array(ArrayBuffer, byteStartImage);
-    //alert(bytes.byteLength);
+
+    //download file
+    saveByteArray([bytes], 'example.pdf');
     
     var blob = new Blob([bytes], {type: "image/jpeg"});
     var urlCreator = window.URL || window.webkitURL;
-    var imageUrl = urlCreator.createObjectURL(blob);    
+    var imageUrl = urlCreator.createObjectURL(blob);
 
-    var myImage = new Image(150, 150);
-    myImage.src = imageUrl;
-     var senderId = '#' + sender.toString() + '>ul';
-     alert(senderId);
-    $(senderId).append(myImage);
     
-    
+
+    var senderId = '#' + sender.toString() + '>ul';
+    //var senderId = '#arnau>ul';
+    alert(senderId);
+
+    var img = $('<img width="150" height="150">');
+    img.attr('src', imageUrl);
+    img.appendTo(senderId);
+
+
 }
 /**
  * Creates a new Uint8Array based on two different ArrayBuffers
@@ -85,9 +89,29 @@ function drawImageBinary(ArrayBuffer) {
  * @param {ArrayBuffers} buffer2 The second buffer.
  * @return {ArrayBuffers} The new ArrayBuffer created out of the two.
  */
-var _appendBuffer = function(buffer1, buffer2) {
-  var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
-  tmp.set(new Uint8Array(buffer1), 0);
-  tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
-  return tmp.buffer;
+var _appendBuffer = function (buffer1, buffer2) {
+    var tmp = new Uint8Array(buffer1.byteLength + buffer2.byteLength);
+    tmp.set(new Uint8Array(buffer1), 0);
+    tmp.set(new Uint8Array(buffer2), buffer1.byteLength);
+    return tmp.buffer;
 };
+
+
+
+//to download a binary file (arraybuffer) from the client
+var saveByteArray = (function () {
+    var a = document.createElement("a");
+    document.body.appendChild(a);
+    a.style = "display: none";
+    return function (data, name) {
+        var blob = new Blob(data, {type: "octet/stream"}),
+            url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+}());
+
+
+

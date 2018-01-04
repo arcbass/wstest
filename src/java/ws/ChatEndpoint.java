@@ -51,7 +51,7 @@ public class ChatEndpoint {
         }
     }
 
-    @OnMessage(maxMessageSize = 50000)
+    @OnMessage(maxMessageSize = 5000000)
     public void onBinaryMessage(WsBinaryMessage message, Session session) throws IOException {
         System.out.println("after decoder: " + message.getData());              
         

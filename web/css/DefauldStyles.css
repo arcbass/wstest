@@ -1,0 +1,94 @@
+/* -- Tipografia -- Colors corporatius -- */
+/*Iconos:
+-- user: glyphicon glyphicon-user --
+-- colapse: glyphicon glyphicon-menu-hamburger --
+*/
+body{
+  font-family: 'Nunito', 'Nunito Sans', sans-serif;
+}
+.close{
+ color:#000!important;
+}
+h1{
+  text-transform: capitalize;
+}
+p{
+  margin: 5%;
+}
+a{
+  text-decoration: none;
+}
+a,span{
+  text-decoration: none;
+}
+.glyphicon-user{
+  color:#337ab7 ;
+}
+.glyphicon-menu-hamburger{
+  color: #337ab7;
+}
+.w3-sidebar{
+  background-color: #e6e5e5;
+}
+.w3-teal{
+  background-color: #e6e5e5;
+}
+.tab-list{
+  border: none;
+}
+#tree{
+  margin-left: 2%;  
+}
+.node-tree{
+  background-color: #fff;
+}
+.container{
+  float: none;
+}
+.menuIcon{
+  padding: 4%;
+}
+.userIcon{
+  padding: 4%;
+}
+lis,.list-group-item{
+  padding: 0px;
+}
+.list-group collapse {
+  margin:0%;
+  padding: 0%;
+}
+.list-group-item{
+  padding-top: 1%;
+  padding-bottom:  1%; 
+  border: none !important;
+  border-radius: 4px !important;
+}
+.tabs-left > li > a:hover{
+  color: #000;
+}
+.w3-teal>a{
+  background-color: #999!important;
+}
+.list-group-item>a{
+  padding-left: 2%;
+}
+.nav-tabs>li>a{
+  border: none;
+}
+.sidenav {
+  height: 100%;
+  padding-left: 2%;
+}
+.container-cabecera{
+  align-content: flex-end;
+  padding-right: 1.5%;
+}
+.loggin-button {
+  margin-right: 10%;
+  margin-left: 5%;
+}
+
+#taborigin1{
+    display:none;
+}

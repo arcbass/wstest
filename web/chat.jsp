@@ -10,13 +10,22 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
 
+
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+        <link href="css/w3.css" rel="stylesheet" type="text/css"/>
+        <link href="css/DefauldStyles.css" rel="stylesheet" type="text/css"/>
         <link rel="stylesheet" href="css/chat.css">
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        
+
+        <!-- script -->
+        <script src="js/jquery/jquery.js" type="text/javascript"></script>
+        <script src="js/bootstrap.min.js" type="text/javascript"></script>    
+        <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
+
         <script src="js/users_connected.js"></script>
         <script src="js/ws_conn.js"></script>    
 
@@ -65,15 +74,16 @@
                         <label for="comment">Comment:</label>
                         <textarea class="form-control" rows="5" id="comment"></textarea>
                         <button type="button" id="btnSend" class="btn" onclick="sendMessage()" >Send</button>
-                        <br/><br/><br/>
-                        <button type="button" class="btn" onclick="getImage()">Send Image</button>
-                        <br/><br/><br/>
+                        <br/><br/><br/>            
+                        <input type="file" name="pic" id="myFile" accept="file_extension.pdf|image/*">
+                        <button type="button" class="btn" onclick="inputFile()">Send Image</button>
 
                         <form action="LogoutServlet" method="POST">
                             <input type="submit" value="LOGOUT" />
                         </form>
 
-                        <canvas id="myCanvas" width="300" height="300"></canvas>
+                        
+                       
                     </div>
 
 
@@ -85,6 +95,6 @@
             sendUserLogin('<%=session.getAttribute("user")%>', '<%=session.getId()%>');
         </script>
         <script src="js/binarydata.js"></script>
-        
+
     </body>
 </html>
