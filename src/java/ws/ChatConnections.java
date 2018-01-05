@@ -20,7 +20,7 @@ public class ChatConnections {
 
     private static ChatConnections INSTANCE = null;
     private static final Set<Session> connections = new HashSet<Session>();
-    private static Set<String> usersConnected = new HashSet<String>();
+    private static final Set<String> usersConnected = new HashSet<String>();
 
     private ChatConnections() {
     }
@@ -44,7 +44,7 @@ public class ChatConnections {
         return connections;
     }
 
-    public static Set<String> getUsersConnected() {
+    public synchronized static Set<String> getUsersConnected() {
         return usersConnected;
     }    
 

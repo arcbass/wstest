@@ -88,9 +88,7 @@ public class ChatEndpoint {
                     connections.sendMessage(message);
             }
 
-        } catch (IOException ex) {
-            Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncodeException ex) {
+        } catch (IOException | EncodeException ex) {
             Logger.getLogger(ChatEndpoint.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ws;
 
 import com.google.gson.Gson;
@@ -46,32 +42,22 @@ public class MessageTextDecoder implements Decoder.Text<WsMessage> {
                 System.out.println("WsMsgLogin");
                 //create an object in function of the type of message
                 content = jso.get("object");
-                messageContent = gson.fromJson(content, WsMsgLogin.class);
-                try {
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                messageContent = gson.fromJson(content, WsMsgLogin.class);               
                 break;
+                
             case "WsMsgMessage":
                 System.out.println("WsMsgLogin");
                 //create an object in function of the type of message
                 content = jso.get("object");
-                messageContent = gson.fromJson(content, WsMsgMessage.class);
-                try {
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                messageContent = gson.fromJson(content, WsMsgMessage.class);               
                 break;
+                
             case "WsMsgLogout":
                 System.out.println("WsMsgLogout");
                 content = jso.get("object");
                 messageContent = gson.fromJson(content, WsMsgLogout.class);
-
-                try {
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 break;
+                
             default:
                 throw new RuntimeException("Tipo de mensaje desconocido");            
         }
@@ -81,18 +67,12 @@ public class MessageTextDecoder implements Decoder.Text<WsMessage> {
     @Override
     public boolean willDecode(String message) {
         //verify that the message is a JSON
-        try {
+        
             System.out.println("parsing message");
             JsonParser parser = new JsonParser();
             JsonElement jse = parser.parse(message);
-            if (!jse.isJsonObject()) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            return false;
-        }
+            
+            return jse.isJsonObject();                 
     }
 
     @Override

@@ -1,3 +1,4 @@
+
 package wsmessages;
 
 public class WsMsgLogout implements WsMsg{
@@ -8,6 +9,7 @@ public class WsMsgLogout implements WsMsg{
         this.username = username;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }

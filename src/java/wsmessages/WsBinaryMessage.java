@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package wsmessages;
 
 import java.nio.ByteBuffer;
@@ -14,8 +10,8 @@ import java.nio.ByteBuffer;
 public class WsBinaryMessage {
     
     private String sender;
-    private String reciver;
-    private ByteBuffer data;
+    private final String reciver;
+    private final ByteBuffer data;
 
     public WsBinaryMessage(String reciver, ByteBuffer data) {
         this.reciver = reciver;

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package ws;
 
 import java.nio.ByteBuffer;
@@ -30,8 +26,7 @@ public class MessageBinaryDecoder implements Decoder.Binary<WsBinaryMessage>{
     @Override
     public boolean willDecode(ByteBuffer data) {
         String reciver = getReciverName(data);
-        if (reciver == null || reciver.equals("")) return false;
-        else return true;
+        return (!reciver.equals(""));
     }
 
     @Override
@@ -44,7 +39,8 @@ public class MessageBinaryDecoder implements Decoder.Binary<WsBinaryMessage>{
          System.out.println("destroy decoder binary");
     }
     
-    private String getReciverName(ByteBuffer data){
+    private String getReciverName(ByteBuffer data){        
+        
         int length = data.get(0); 
         String reciver = "";
         for(int i = 1; i <= length; i++) {
