@@ -18,10 +18,10 @@ function createTab(user) {
 }
 ;
 
+//remove the tab and panel when an user disconnects
 function removeTab(user) {
-    var userId = '#tab_' + user;
-    $(userId).remove();
-    //$('#tab_arnau').remove();
+    $('#tab_' + user).remove();
+    $('#' + user).remove();
 }
 
 function listOfUsers(users) {
@@ -31,7 +31,7 @@ function listOfUsers(users) {
 }
 
 function insertMessage(msg, sender, from) {
-    $('<li class="new"><span class="name">' + from + ': ' + msg + '</span>').appendTo("#" + sender + ">ul")
+    $('<li class="new"><span class="name">' + from + ': ' + msg + '</span>').appendTo("#" + sender + ">ul");
 }
 
 
